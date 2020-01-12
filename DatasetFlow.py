@@ -106,7 +106,22 @@ class DatasetFlow:
         return tokens
 
     def _init_from_file_no_target(self, file_path):
+        tokens = get_tokens_from_file(file_path)
         input_sequences = self.input_sequences_test
+
+        sequence = ['<start>']
+        for token in tokens:
+            if token == 'next':
+                sequence.append('<end>')
+                input_sequences.append(sequence)
+                sequence = ['<start>']
+            else:
+                self.dictionary.add(token)
+                sequence.append(token)
+        sequence.append('<end>')
+        input_sequences.append(sequence)
+
+        self.input_sequences_test = [self.translate_tokens(tokens) for tokens in self.input_sequences_test]
 
     def _init_from_file(self, file_path, for_test=False):
         tokens = get_tokens_from_file(file_path)
@@ -172,6 +187,14 @@ class DatasetFlow:
         self.target_tensor_test = self.target_tokenizer.texts_to_sequences(self.target_sequences_test)
         self.target_tensor_test = tf.keras.preprocessing.sequence.pad_sequences(self.target_tensor_test, padding='post')
         self.target_tensor_test = encode_output(self.target_tensor_test, len(self.target_tokenizer.word_index) + 1)
+
+    def tokenize_code_test_no_target(self):
+        self.input_tensor_test = self.input_tokenizer.texts_to_sequences(self.input_sequences_test)
+        self.input_tensor_test = tf.keras.preprocessing.sequence.pad_sequences(self.input_tensor_test, padding='post', maxlen=36)
+        print()
+        # self.target_tensor_test = self.target_tokenizer.texts_to_sequences(self.target_sequences_test)
+        # self.target_tensor_test = tf.keras.preprocessing.sequence.pad_sequences(self.target_tensor_test, padding='post')
+        # self.target_tensor_test = encode_output(self.target_tensor_test, len(self.target_tokenizer.word_index) + 1)
 
     def tokenize_code(self):
         self.input_tokenizer.fit_on_texts(self.input_sequences)

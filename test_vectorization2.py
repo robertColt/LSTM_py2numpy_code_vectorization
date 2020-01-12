@@ -36,10 +36,10 @@ def pretty_print(words):
 
 
 if __name__ == '__main__':
-    model_path = 'model_checkpoint/lstm_model2.h5'
+    model_path = 'model_checkpoint/lstm_model4.h5'
     model = tf.keras.models.load_model(model_path)
 
-    with open('datasetflow.pkl', 'rb') as dataset_file:
+    with open('datasetflow2.pkl', 'rb') as dataset_file:
         dataset_flow: DatasetFlow = pickle.load(dataset_file)
 
     # pair_id = -3
@@ -54,7 +54,7 @@ if __name__ == '__main__':
     # print('Predicted', dataset_flow.target_seq_to_words(prediction))
 
     for_test = True
-    dataset_flow._init_from_file('data_pairs_test.py', for_test=for_test)
+    dataset_flow._init_from_file('data_pairs_test2.py', for_test=for_test)
     dataset_flow.tokenize_code_test()
 
     predictions = model.predict(dataset_flow.input_tensor_test)

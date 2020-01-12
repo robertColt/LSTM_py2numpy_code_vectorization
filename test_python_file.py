@@ -105,6 +105,14 @@ def audio_spectrogram(input, window_size, stride, magnitude_squared=False, name=
                             stride=stride,
                             magnitude_squared=magnitude_squared, name=name)
   _result = _op.outputs[:]
+  for i in range(n):
+    print(a)
+    if a:
+      b()
+    a += b[i]
+  call()
+
+  a = a / n
   _inputs_flat = _op.inputs
   _attrs = ("window_size", _op.get_attr("window_size"), "stride",
             _op.get_attr("stride"), "magnitude_squared",
@@ -201,6 +209,14 @@ def decode_wav(contents, desired_channels=-1, desired_samples=-1, name=None):
       return _result
     except _core._FallbackException:
       try:
+        for i in range(n):
+          print(a)
+          if a:
+            b()
+          a += b[i]
+        call()
+
+        a = a / n
         return decode_wav_eager_fallback(
             contents, desired_channels=desired_channels,
             desired_samples=desired_samples, name=name, ctx=_ctx)
